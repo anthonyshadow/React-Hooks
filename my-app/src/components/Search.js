@@ -4,35 +4,43 @@ import axios from 'axios';
 const Search = () => {
 
     const [term, setTerm] = useState('');
+    const [debouncedTerm, setDebouncedTerm] = useState(term)
     const [results, setResults] =useState([]);
 
+// by using two use effects and the debouncedTerm we are making sure that the api is only making one network request at a time, 
+// and not after every keystroke (clearTimeout), also if the same word is searched it wont make another request 
+
     useEffect(() => {
-       const search = async () => {
-           const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
-               params: {
-                 action: 'query',
-                 list: 'search',
-                 origin: '*',
-                 format: 'json',
-                 srsearch: term,
-               }
-           })
+        const timerId = setTimeout(() => {
+            setDebouncedTerm(term);
+        },500);
 
-           setResults(data.query.search);
-       };
-       
-       const timeoutId = setTimeout(() => {
-        if (term) {
-            search();
-            }
-       }, 500);
-       
-       //Implementing a delayed request so that we don't request the api after every keystroke
-       return () => {
-           clearTimeout(timeoutId)
-       };
+        return () => {
+            clearTimeout(timerId)
+        };
+    },[term]);
 
-    }, [term]);
+    useEffect(() => {
+        const search = async () => {
+            const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
+                params: {
+                  action: 'query',
+                  list: 'search',
+                  origin: '*',
+                  format: 'json',
+                  srsearch: debouncedTerm,
+                },
+            });
+ 
+            setResults(data.query.search);
+        };
+
+        if (debouncedTerm) {
+          search();
+        }
+
+    }, [debouncedTerm]);
+
 
     const renderedResults = results.map((result) => {
         return (
