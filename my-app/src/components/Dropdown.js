@@ -9,14 +9,23 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
     const ref = useRef();
 
     useEffect(() => {
-        // event listener added on to the body in accordance with ref, allows the dropdown to list to close auto after choosing option
-        document.body.addEventListener('click', (event) => {
+        const onBodyClick = (event) => {
             if(ref.current.contains(event.target)) {
                 return;
             };
-
             setOpen(false);
-        }, {capture: true});
+        };;
+
+        // event listener added on to the body in accordance with ref, allows the dropdown to list to close auto after choosing option
+        document.body.addEventListener('click', onBodyClick, {capture: true});
+
+
+  
+        // if the body that the event is listening on doesent exisit (toggle button for dropdown removes the area where it was listening)
+        return () => {
+            document.body.removeEventListener('click', onBodyClick, {capture: true})
+        };
+
     }, []);
 
     const renderedOptions = options.map((option) => {
