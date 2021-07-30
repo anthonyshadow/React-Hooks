@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 import Accordion from "./components/Accordion";
 import Search from "./components/Search"
 import Dropdown from "./components/Dropdown"
 import Translate from "./components/Translate";
+import Route from "./components/Route";
 
 const items = [
   {
@@ -38,17 +39,61 @@ const options = [
 
 const App = () => {
 
-    // const [selected, setSelected] = useState(options[0]);
-    // const [showDropdown, setShowDropdown] = useState(true);
+  const [selected, setSelected] = useState(options[0]);
+  const [showDropdown, setShowDropdown] = useState(true);
+
+
+  // Just another way to create a route, however react router (which we are not using is the best way)
+
+  // const showAccordion = () => {
+  //   if (window.location.pathname === '/') {
+  //     return <Accordion items={items}/>
+  //   }
+  // }
+
+  // const showList = () => {
+  //   if (window.location.pathname === '/list') {
+  //     return ;
+  //   }
+  // };
+
+  // const showDropdownRoute = () => {
+  //   if (window.location.pathname === '/dropdown') {
+  //     return (
+  //       <div>
+  //         <button onClick={() => setShowDropdown(!showDropdown)}>Toggle Dropdown</button>
+  //         {showDropdown ? <Dropdown options={options} selected={selected} onSelectedChange={setSelected}/>: null}
+  //       </div>
+  //     )
+  //   }
+  // };
+
+  // const showTranslate = () => {
+  //   if (window.location.pathname === '/translate') {
+  //     return <Translate /> ;
+  //   }
+  // }
+
   
   return (
-    // <div>
-    //   <button onClick={() => setShowDropdown(!showDropdown)}>Toggle Dropdown</button>
-    //   {/* <Accordion items={items} /> */}
-    //   {/* {<Search />} */}
-    //   {showDropdown ? <Dropdown options={options} selected={selected} onSelectedChange={setSelected}/>: null}
-    // </div>
-    <div><Translate /></div>
+    <div>
+      <Route path ="/">
+        <Accordion items={items} />
+      </Route>
+      <Route path ="/list">
+        <Search />
+      </Route>
+      <Route path ="/dropdown">
+        <div>
+          <button onClick={() => setShowDropdown(!showDropdown)}>Toggle Dropdown</button>
+          {showDropdown ? <Dropdown label="Select a Color" options={options} selected={selected} onSelectedChange={setSelected}/>: null}
+        </div>
+      </Route>
+      <Route path ="/translate">
+        <Translate />
+      </Route>
+
+    </div>
   );
 };
 export default App;
