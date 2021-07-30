@@ -1,9 +1,10 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import Accordion from "./components/Accordion";
 import Search from "./components/Search"
 import Dropdown from "./components/Dropdown"
 import Translate from "./components/Translate";
 import Route from "./components/Route";
+import Header from "./components/Header";
 
 const items = [
   {
@@ -44,6 +45,7 @@ const App = () => {
 
 
   // Just another way to create a route, however react router (which we are not using is the best way)
+  // Created a simple route component instead
 
   // const showAccordion = () => {
   //   if (window.location.pathname === '/') {
@@ -77,6 +79,7 @@ const App = () => {
   
   return (
     <div>
+      <Header />
       <Route path ="/">
         <Accordion items={items} />
       </Route>
